@@ -8,14 +8,8 @@ import PlusButton from './PlusButton/PlusButton';
 import Navbar from './NavBar/NavBar';
 
 
-const jobsList = [
-  'Meta',
-  'Apple',
-  'Tesla',
-  'Microsoft',
-  'Nvidia',
-  // Add more job titles here
-];
+const jobsList = [];
+
 const JobsPage = () => {
   const [myJobs, setMyJobs] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState('');

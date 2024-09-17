@@ -4,14 +4,14 @@ import './Filter.css'
 
 const Filter= () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [filterCriteria, setfilterCriteria] = useState("Filter"); // Valor padrão do botão
+  const [filterCriteria, setFilterCriteria] = useState("Filter"); // Valor padrão do botão
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleFilterClick = (criteria) => {
-    setfilterCriteria(criteria);
+    setFilterCriteria(criteria);
     setIsMenuOpen(false);
   };
 

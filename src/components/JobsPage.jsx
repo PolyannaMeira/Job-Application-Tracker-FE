@@ -9,12 +9,6 @@ import SignUp from "./Signup/Signup";
 import Sidebar from "./Sidebar/Sidebar";
 
 const jobsList = [
-  "Meta",
-  "Apple",
-  "Tesla",
-  "Microsoft",
-  "Nvidia",
-  // Add more job titles here
 ];
 const JobsPage = () => {
   const [myJobs, setMyJobs] = useState([]);

@@ -5,6 +5,7 @@ import Filter from "./Filter/Filter";
 import Sort from "./Sort/Sort";
 import Search from "./Search/Search";
 import HamburgerButton from "./Navigation/Navigation";
+import SignUp from "./Signup/Signup";
 import Sidebar from "./Sidebar/Sidebar";
 
 const jobsList = [

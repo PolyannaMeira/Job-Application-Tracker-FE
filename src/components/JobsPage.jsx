@@ -54,7 +54,7 @@ const JobsPage = () => {
     }
 
     setFilteredJobs(sortedJobs);
-  }, [sortCriteria, filteredJobs]);
+  }, [sortCriteria]);
 
 
   const transferHandler = (data) => {

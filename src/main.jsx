@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       { path: "delete/:id", element: <DeleteJob /> },
       { path: "account-details", element: <AccountDetails /> },
       { path: "JobProfileForm", element: <JobProfileForm /> },
-      { path: "UpdateJobProfileForm/:id", element: <UpdateJobProfileForm /> },
+      { path: "update/:id", element: <UpdateJobProfileForm /> },
     ],
   },
   { path:"/signup", element: <SignUp/>} 

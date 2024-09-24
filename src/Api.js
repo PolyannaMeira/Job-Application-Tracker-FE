@@ -1,4 +1,3 @@
-// This is fixed, we'll see later how to update it.
 const url = "http://localhost:5000/";
 
 const Api = {
@@ -8,45 +7,43 @@ const Api = {
   },
 
   getMyJobsDetails: async (id) => {
-    const response = await fetch(url + `job/${id}`);
+    const response = await fetch(`${url}job/${id}`);
     return response.json();
   },
 
-  createJobProfile: async (formData) => {
+  createJobProfile: async (jobData) => {
     const response = await fetch(url + "job", {
       method: "POST",
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData) ,
+      body: jobData,
     });
-    console.log(JSON.stringify(formData))
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to create job profile: ${errorText}`);
+    }
     return response.json();
   },
 
-  updateJob : async (id, formData) => {
-    const response = await fetch(`url/job/${id}`, {
+  updateJobProfile: async (id, jobData) => {
+    const response = await fetch(`${url}job/${id}`, {
       method: "PUT",
-      body: formData, 
+      body: jobData,
     });
     if (!response.ok) {
-      throw new Error("Failed to update job");
+      const errorText = await response.text();
+      throw new Error(`Failed to update job profile: ${errorText}`);
     }
-  
-    return response.json(); 
+    return response.json();
   },
-  
-  
 
   deleteJobDetails: async (id) => {
-    const response = await fetch(url + `job/${id}`, {
+    const response = await fetch(`${url}job/${id}`, {
       method: "DELETE",
     });
     return response.json();
   },
+
   searchJobs: async (query) => {
-    const response = await fetch(url + `jobs/search?query=${query}`);
+    const response = await fetch(`${url}jobs/search?query=${query}`);
     if (!response.ok) throw new Error("Failed to fetch search results");
     return response.json();
   },

@@ -1,16 +1,16 @@
-import  { useState } from "react";
-import  { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import  { useState, useEffect } from "react";
+import {useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../../Api"
 import "./UpdateJobProfileForm.css";
 
-const UpdateJobProfileForm = (jobData) => {
+const UpdateJobProfileForm = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [formData, setFormData] = useState({
-    
+
     companyName: "",
     jobRole: "",
-    salaryRange: "",
+    salary: "",
     jobUrl: "",
     date: "",
     location: "",
@@ -22,32 +22,46 @@ const UpdateJobProfileForm = (jobData) => {
   const [loading, setLoading] = useState(true);
 
   // Pre-fill the form with the job data passed from the parent component
-  useEffect(() => {
-    
-    const fetchJobDetails = async () => {
-      try {
-        const jobDetails = await api.getMyJobsDetails(id); 
-        setFormData({
-          companyName: jobDetails.companyName || "",
-          jobRole: jobDetails.jobTitle || "",
-          salaryRange: jobDetails.salaryRange || "",
-          jobUrl: jobDetails.jobUrl || "",
-          date: jobDetails.date || "",
-          location: jobDetails.location || "",
-          status: jobDetails.status || "",
-          attachment: null,
-          notes: jobDetails.notes || "",
-        });
-        setLoading(false); 
-      } catch (error) {
-        console.error("Error fetching job details:", error);
-        setLoading(false);
-      }
-    };
 
-    
-    fetchJobDetails();
-  }, [id]);
+  useEffect(() => {
+    if (location.state && location.state.jobData) {
+      const jobDetails = location.state.jobData;
+      setFormData({
+        companyName: jobDetails.companyName || "",
+        jobRole: jobDetails.jobRole || "",
+        salary: jobDetails.salary || "",
+        jobUrl: jobDetails.jobUrl || "",
+        date: jobDetails.date || "",
+        location: jobDetails.location || "",
+        status: jobDetails.status || "",
+        attachment: null,
+        notes: jobDetails.notes || "",
+      });
+      setLoading(false);
+    } else {
+      const fetchJobDetails = async () => {
+        try {
+          const jobDetails = await api.getMyJobsDetails(id);
+          setFormData({
+            companyName: jobDetails.companyName || "",
+            jobRole: jobDetails.jobRole || "",
+            salary: jobDetails.salary || "",
+            jobUrl: jobDetails.jobUrl || "",
+            date: jobDetails.date || "",
+            location: jobDetails.location || "",
+            status: jobDetails.status || "",
+            attachment: null,
+            notes: jobDetails.notes || "",
+          });
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching job details:", error);
+          setLoading(false);
+        }
+      };
+      fetchJobDetails();
+    }
+  }, [id, location]);
 
 
   const handleChange = (e) => {
@@ -65,48 +79,45 @@ const UpdateJobProfileForm = (jobData) => {
     });
   };
 
-  
+
     const handleSubmit = async (e) => {
       e.preventDefault();
-    
-      
+      console.log("Submit button clicked!");
+
+
       const formDataToSend = new FormData();
       formDataToSend.append("companyName", formData.companyName);
-      formDataToSend.append("interviewDate", formData.date); 
+      formDataToSend.append("date", formData.date);
       formDataToSend.append("jobRole", formData.jobRole);
-      formDataToSend.append("salary", formData.salaryRange);
+      formDataToSend.append("salary", formData.salary);
       formDataToSend.append("status", formData.status);
       formDataToSend.append("jobUrl", formData.jobUrl);
       formDataToSend.append("location", formData.location);
       formDataToSend.append("notes", formData.notes);
-    
-      
+
+
       if (formData.attachment) {
         formDataToSend.append("attachment", formData.attachment);
       }
-    
       try {
-       
-        const response = await api.updateJob(jobData.id, formDataToSend); 
+        const response = await api.updateJobProfile(id, formDataToSend);
         console.log("Job updated successfully:", response);
-        
-        
-        navigate("/myjobs"); 
+        alert("Job updated successfully!"); // Add success feedback
+        navigate("/myjobs");
       } catch (error) {
         console.error("Error updating job:", error);
+        alert("Failed to update job. Please try again.");
       }
     };
-    
- 
 
   const navigate = useNavigate(); // Hook for navigation
 
   const handleCancel = () => {
-    navigate("/myjobs"); 
+    navigate("/myjobs");
   };
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
 
@@ -143,8 +154,8 @@ const UpdateJobProfileForm = (jobData) => {
           <label>Salary Range</label>
           <input
             type="text"
-            name="salaryRange"
-            value={formData.salaryRange}
+            name="salary"
+            value={formData.salary}
             onChange={handleChange}
             placeholder="Salary Range"
           />
@@ -166,7 +177,7 @@ const UpdateJobProfileForm = (jobData) => {
           <input
             type="date"
             name="date"
-            value={formData.date.split('T')[0]} 
+            value={formData.date.split('T')[0]}
             onChange={handleChange}
             required
           />

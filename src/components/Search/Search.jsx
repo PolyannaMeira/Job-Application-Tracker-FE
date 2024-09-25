@@ -1,15 +1,21 @@
-import { useState } from "react";
+
+// src/components/Search/Search.jsx
+import { useState } from 'react';
 import Api from "../../Api";
+import "./Search.css";
+import { useNavigate } from 'react-router-dom';
 
 const Search = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   let debounceTimer;
+
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
-
+    
     if (debounceTimer) {
       clearTimeout(debounceTimer);
     }
@@ -24,19 +30,24 @@ const Search = () => {
     }, 300); // Adjust the debounce time as needed
   };
 
+  const handleResultClick = (item) => {
+    console.log('Clicked on job with id:', item.id);
+    navigate(`/myjob/${item.id}`);
+  };
+
   return (
     <div className="search-container">
-      <input
-        className="search-bar"
+      <input 
         type="text"
         placeholder="Search..."
-        onChange={handleInputChange}
         value={searchQuery}
+        onChange={handleInputChange}
+        className="search-input"
       />
-      <span className="search-icon">🔍</span>
       <div className="search-results">
         {filteredData.map((item, index) => (
-          <div key={index} className="search-item">
+          <div key={index} className="search-item" onClick={() => handleResultClick(item)}>
+
             {item.companyName} - {item.jobRole}
           </div>
         ))}

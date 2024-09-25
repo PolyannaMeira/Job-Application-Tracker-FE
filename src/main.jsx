@@ -26,14 +26,14 @@ const router = createBrowserRouter([
     children: [
       { path: "myjobs", element: <JobsPage /> },
       { path: "myjob/:id", element: <JobDetails /> },
-      { path: "delete/:id", element: <DeleteJob /> },
+      { path: "myjob/:id/delete", element: <DeleteJob /> },
       { path: "account-details", element: <AccountDetails /> },
       { path: "JobProfileForm", element: <JobProfileForm /> },
-      { path: "UpdateJobProfileForm/:id", element: <UpdateJobProfileForm /> },
-      { path: "agenda", element: <Agenda /> }
+      { path: "update/:id", element: <UpdateJobProfileForm /> },
+      { path: "agenda", element: <Agenda /> },
     ],
   },
-  { path:"/signup", element: <SignUp/>} 
+  { path: "/signup", element: <SignUp /> },
 ]);
 
 createRoot(document.getElementById("root")).render(

@@ -10,9 +10,13 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  width: 425px;
+  width: 350px;
   margin: auto;
   position: relative; /* Allows absolute positioning of child elements */
+}
+
+.delete-confirm-message {
+  font-size: 20px;
 }
 
 .cancel-icon {
@@ -28,6 +32,7 @@
   text-align: center;
 }
 .btn{
+  display: flex;
   font-size: 18px;
   color: #fff;
   cursor: pointer;
@@ -53,7 +58,7 @@
 }
 
 .delete-cancel-btn {
-  background-color: #f0f0f0;
+  background-color: #4a4444;
 }
 
 .delete-confirm-btn {

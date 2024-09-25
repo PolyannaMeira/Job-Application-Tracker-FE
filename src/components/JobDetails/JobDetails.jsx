@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Api from "./../../Api";
+import Api from "../../Api";
 import "./JobDetails.css";
-
 
 const JobDetails = () => {
   const { id } = useParams(); // Get the job ID from the URL
@@ -11,7 +10,7 @@ const JobDetails = () => {
   const [error, setError] = useState(null); // State to handle errors
 
   const navigate = useNavigate();
-  
+
   // Fetch job details when the component mounts
   const fetchJobDetails = async (jobId) => {
     try {
@@ -26,7 +25,7 @@ const JobDetails = () => {
   };
 
   useEffect(() => {
-    if(id){
+    if (id) {
       fetchJobDetails(id);
     }
   }, [id]);
@@ -41,23 +40,26 @@ const JobDetails = () => {
     return <div>Error: {error}</div>;
   }
 
-  const updateHandler=(jobId)=>{
-    navigate(`/UpdateJobProfileForm/${jobId}`, { replace: true });
-  }
-  const backHandler=()=>{
+  const updateHandler = (jobId) => {
+    console.log(jobId)
+    navigate(`/update/${jobId}`, { replace: true });
+  };
+
+  const backHandler = () => {
     navigate(`/myjobs`, { replace: true });
-  }
-  const deleteHandler=(jobId)=>{
-    navigate(`/delete/${jobId}`, { replace: true });
-  }
+  };
+
+  const deleteHandler = (jobId) => {
+    navigate(`/myjob/${jobId}/delete`, { replace: true });
+  };
+
   // Display job details if data is fetched successfully
   return (
-
     <div className="job-details">
       <h2 className="title">Job Details</h2>
       <div className="job-details-container">
         <p><strong>Company Name:</strong> {job.companyName}</p>
-        <p><strong>Interview Date:</strong> {job.interviewDate}</p>
+        <p><strong>Interview Date:</strong> {job.date}</p>
         <p><strong>Job Role:</strong> {job.jobRole}</p>
         <p><strong>Salary:</strong> {job.salary}</p>
         <p><strong>Status:</strong> {job.status}</p>
@@ -66,9 +68,11 @@ const JobDetails = () => {
         <p><strong>Location:</strong> {job.location}</p>
         <p><strong>Notes:</strong> {job.notes}</p>
       </div>
-      <button className='update' onClick={() => updateHandler(job.id)}>Update</button>
-      <button className='back' onClick ={()=>backHandler(id)} >Back</button>
-      <button className='delete' onClick={() => deleteHandler()}>Delete</button>
+        <div className='update-back-delete-btn'>
+          <button className='update' onClick={() => updateHandler(job.id)}>Update</button>
+          <button className='back' onClick={backHandler}>Back</button>
+          <button className='delete' onClick={() => deleteHandler(job.id)}>Delete</button>
+        </div>
     </div>
   );
 };

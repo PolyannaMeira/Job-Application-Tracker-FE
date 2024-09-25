@@ -39,6 +39,9 @@ const JobProfileForm = () => {
     try {
       await Api.createJobProfile(inputData);
       alert("Job created successfully!");
+
+      navigate("/myjobs");
+
     } catch (error) {
       alert(`Failed to create job: ${error.message}`);
     }
@@ -46,9 +49,12 @@ const JobProfileForm = () => {
 
   const navigate = useNavigate(); // Hook for navigation
 
+  
   const handleCancel = () => {
     navigate("/myjobs");
   };
+
+  
 
   return (
     <div className="job-profile-form-container">
@@ -102,11 +108,11 @@ const JobProfileForm = () => {
         </div>
 
         <div className="form-group">
-          <label>Date</label>
+          <label>Interview Date</label>
           <input
-            type="interviewDate"
+            type="date"
             name="interviewDate"
-            value={inputData.interviewDate}
+            value={inputData.interviewDate.split('T')[0]} 
             onChange={handleChange}
             required
           />
@@ -135,7 +141,7 @@ const JobProfileForm = () => {
 
         <div className="form-group">
           <label>Attachment</label>
-          <input type="file" name="attachment" onChange={handleFileChange} />
+          <input type="file" name="attachment" onChange={handleFileChange} accept=".pdf"/>
         </div>
 
         <div className="form-group">
@@ -149,7 +155,7 @@ const JobProfileForm = () => {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="btn-create">
+          <button type="submit" className="btn-create" >
             Create
           </button>
           <button type="button" className="btn-cancel" onClick={handleCancel}>

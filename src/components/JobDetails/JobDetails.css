@@ -31,6 +31,10 @@ button {
   font-size: 16px;
 }
 
+.update-back-delete-btn{
+  display: flex;
+}
+
 .update {
   background-color: #28a745;
 }

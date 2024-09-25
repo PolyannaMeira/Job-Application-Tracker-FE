@@ -11,11 +11,13 @@ function HamburgerButton() {
     setIsOpen(!isOpen);
   };
 
+
   // Close the menu and navigate
   const handleNavigation = (route) => {
     setIsOpen(false); // Close the menu when navigation item is clicked
     navigate(route); // Navigate to the route
   };
+
 
   return (
     <>
@@ -31,6 +33,7 @@ function HamburgerButton() {
       {isOpen && (
         <nav className="nav-menu">
           <ul>
+
             <li onClick={() => handleNavigation("/account-details")}>
               Account Details
             </li>
@@ -39,6 +42,7 @@ function HamburgerButton() {
               Create Job Profile
             </li>
             <li onClick={() => handleNavigation("/")}>Log Out</li>
+
           </ul>
         </nav>
       )}

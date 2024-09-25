@@ -1,16 +1,15 @@
-import  { useState } from "react";
-import  { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../../Api"
+import api from "../../Api";
 import "./UpdateJobProfileForm.css";
 
-const UpdateJobProfileForm = (jobData) => {
+const UpdateJobProfileForm = () => {
   const { id } = useParams();
-  const [formData, setFormData] = useState({
-    
+  const navigate = useNavigate();
+  const [jobData, setJobData] = useState({
     companyName: "",
     jobRole: "",
-    salaryRange: "",
+    salary: "",
     jobUrl: "",
     interviewDate: "",
     location: "",
@@ -21,107 +20,89 @@ const UpdateJobProfileForm = (jobData) => {
 
   const [loading, setLoading] = useState(true);
 
-  // Pre-fill the form with the job data passed from the parent component
-  useEffect(() => {
-    
-    const fetchJobDetails = async () => {
-      try {
-        const jobDetails = await api.getMyJobsDetails(id); 
-        setFormData({
-          companyName: jobDetails.companyName || "",
-          jobRole: jobDetails.jobTitle || "",
-          salaryRange: jobDetails.salaryRange || "",
-          jobUrl: jobDetails.jobUrl || "",
-          interviewDate: jobDetails.interviewDate || "",
-          location: jobDetails.location || "",
-          status: jobDetails.status || "",
-          attachment: null,
-          notes: jobDetails.notes || "",
-        });
-        setLoading(false); 
-      } catch (error) {
-        console.error("Error fetching job details:", error);
-        setLoading(false);
-      }
-    };
+  // Fetch job details from the API
+  const fetchJobDetails = async () => {
+    try {
+      const data = await api.getMyJobsDetails(id);
+      const jobDetails = data[0];
+      setJobData({
+        companyName: jobDetails.companyName || "",
+        jobRole: jobDetails.jobRole || "",
+        salary: jobDetails.salary || "",
+        jobUrl: jobDetails.jobUrl || "",
+        interviewDate: jobDetails.interviewDate || "",
+        location: jobDetails.location || "",
+        status: jobDetails.status || "",
+        attachment: null,
+        notes: jobDetails.notes || "",
+      });
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching job details:", error);
+      setLoading(false);
+    }
+  };
 
-    
+  useEffect(() => {
     fetchJobDetails();
   }, [id]);
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setJobData({
+      ...jobData,
       [name]: value,
     });
   };
 
   const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
+    setJobData({
+      ...jobData,
       attachment: e.target.files[0],
     });
   };
 
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-    
-      
-      const formDataToSend = new FormData();
-      formDataToSend.append("companyName", formData.companyName);
-      formDataToSend.append("interviewDate", formData.date); 
-      formDataToSend.append("jobRole", formData.jobRole);
-      formDataToSend.append("interviewDate", formData.interviewDate);
-      formDataToSend.append("salary", formData.salary);
-      formDataToSend.append("status", formData.status);
-      formDataToSend.append("jobUrl", formData.jobUrl);
-      formDataToSend.append("location", formData.location);
-      formDataToSend.append("notes", formData.notes);
-    
-      
-      if (formData.attachment) {
-        formDataToSend.append("attachment", formData.attachment);
-      }
-    
-      try {
-       
-        const response = await api.updateJob(jobData.id, formDataToSend); 
-        console.log("Job updated successfully:", response);
-        
-        
-        navigate("/myjobs"); 
-      } catch (error) {
-        console.error("Error updating job:", error);
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const jobDataToSend = {
+      companyName: jobData.companyName,
+      jobRole: jobData.jobRole,
+      salary: jobData.salary,
+      jobUrl: jobData.jobUrl,
+      interviewDate: jobData.interviewDate,
+      location: jobData.location,
+      status: jobData.status,
+      notes: jobData.notes,
     };
-    
- 
 
-  const navigate = useNavigate(); // Hook for navigation
+    try {
+     await api.updateJob(id, jobDataToSend);
+      navigate("/myjobs"); // Redirect after successful update
+    } catch (error) {
+      console.error("Error updating job:", error);
+      alert("Failed to update job. Please try again.");
+    }
+  };
 
   const handleCancel = () => {
-    navigate("/myjobs"); 
+    navigate(`/myjob/${id}`);
   };
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
-
 
   return (
     <div className="update-job-profile-form-container">
       <form className="update-job-profile-form" onSubmit={handleSubmit}>
-        <h2>Update</h2>
+        <h2>Update Job Profile</h2>
 
         <div className="form-group">
           <label>Company Name</label>
           <input
             type="text"
             name="companyName"
-            value={formData.companyName}
+            value={jobData.companyName}
             onChange={handleChange}
             placeholder="Company Name"
             required
@@ -133,7 +114,7 @@ const UpdateJobProfileForm = (jobData) => {
           <input
             type="text"
             name="jobRole"
-            value={formData.jobRole}
+            value={jobData.jobRole}
             onChange={handleChange}
             placeholder="Job Role"
             required
@@ -145,9 +126,9 @@ const UpdateJobProfileForm = (jobData) => {
           <input
             type="text"
             name="salary"
-            value={formData.salary}
+            value={jobData.salary}
             onChange={handleChange}
-            placeholder="Salary"
+            placeholder="Salary Range"
           />
         </div>
 
@@ -156,18 +137,18 @@ const UpdateJobProfileForm = (jobData) => {
           <input
             type="url"
             name="jobUrl"
-            value={formData.jobUrl}
+            value={jobData.jobUrl}
             onChange={handleChange}
             placeholder="Job URL"
           />
         </div>
 
         <div className="form-group">
-          <label>Date</label>
+          <label>Interview Date</label>
           <input
-            type="interviewDate"
+            type="date"
             name="interviewDate"
-            value={formData.interviewDate.split('T')[0]} 
+            value={jobData.interviewDate.split("T")[0]}
             onChange={handleChange}
             required
           />
@@ -178,7 +159,7 @@ const UpdateJobProfileForm = (jobData) => {
           <input
             type="text"
             name="location"
-            value={formData.location}
+            value={jobData.location}
             onChange={handleChange}
             placeholder="Location"
           />
@@ -186,7 +167,7 @@ const UpdateJobProfileForm = (jobData) => {
 
         <div className="form-group">
           <label>Status</label>
-          <select name="status" value={formData.status} onChange={handleChange}>
+          <select name="status" value={jobData.status} onChange={handleChange}>
             <option value="">Select Status</option>
             <option value="Open">Open</option>
             <option value="Closed">Closed</option>
@@ -203,7 +184,7 @@ const UpdateJobProfileForm = (jobData) => {
           <label>Notes</label>
           <textarea
             name="notes"
-            value={formData.notes}
+            value={jobData.notes}
             onChange={handleChange}
             placeholder="Notes"
           ></textarea>

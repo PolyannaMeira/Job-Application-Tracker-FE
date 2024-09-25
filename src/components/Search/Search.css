@@ -1,30 +1,34 @@
+/* Search Bar Container */
 .search-container {
-    width: 100%;
-    max-width: 500px;
-    margin: 20px 20px;
-    background-color: #ECE6F0;
-    border-radius: 10px;
-    width: 90%;
-    
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  width: 100%;
+}
+
+/* Search Bar Styling */
+.search-bar {
+  width: 80%; /* Takes most of the container's width */
+  max-width: 600px; /* Max width to restrict on large screens */
+  padding: 12px 15px;
+  border-radius: 25px; /* Rounded corners for aesthetic appeal */
+  border: 1px solid #ccc;
+  background-color: #f0f0f0; /* Soft background color */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  font-size: 1rem;
+  outline: none;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.search-bar:focus {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* More pronounced shadow on focus */
+  background-color: #ffffff; /* White background when focused */
+}
+
+/* Responsive adjustments for smaller devices */
+@media (max-width: 768px) {
+  .search-bar {
+    width: 95%;
+    font-size: 0.9rem;
   }
-  
-  .search-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    padding-left: 48px;
-    border: 1px solid #ccc;
-    background: url("https://img.icons8.com/ios-filled/23/search--v1.png" ) no-repeat;
-    background-position: 10px 12px;
-  }
-  
-  .search-results {
-    margin-top: 10px;
-  }
-  
-  .search-item {
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
-  }
-  
+}
